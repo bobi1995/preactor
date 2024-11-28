@@ -28,7 +28,7 @@ const TimelineComponent: React.FC<TimelineProps> = ({ viewType }) => {
       });
     } else {
       // For "weeks", calculate the start date of each week
-      return Array.from({ length: 9 }, (_, i) => {
+      return Array.from({ length: 4 }, (_, i) => {
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() + i * 7); // Add i weeks to today's date
         return `Week of ${formatDate(startOfWeek)}`;

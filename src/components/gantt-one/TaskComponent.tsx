@@ -15,13 +15,10 @@ interface TaskComponentProps {
 const day = new Date();
 
 const TaskComponent: React.FC<TaskComponentProps> = ({
-  rowIndex,
   machine,
   tasks,
   viewType,
 }) => {
-  let gridTemplate = "";
-  let gridDivs: JSX.Element[] = [];
   const shift = shifts.find((shift) => shift.id === machine.shiftId);
   if (!shift) {
     return null;

@@ -24,17 +24,17 @@ const WeeksView: React.FC<WeeksViewProps> = ({
   shift,
   machineId,
 }) => {
-  const numWeeks = 9; // Number of weeks
+  const numWeeks = 4; // Number of weeks
   const daysPerWeek = 7; // Days per week
   const sectionsPerDay = 3; // Morning, Day, Evening
-  const totalDays = numWeeks * daysPerWeek; // Total days in 9 weeks
+  const totalDays = numWeeks * daysPerWeek; // Total days in 4 weeks
 
-  const column1 = firstDiv / daysPerWeek;
-  const column2 = secondDiv / daysPerWeek;
-  const column3 = thirdDiv / daysPerWeek;
+  const column1 = firstDiv / (daysPerWeek * numWeeks);
+  const column2 = secondDiv / (daysPerWeek * numWeeks);
+  const column3 = thirdDiv / (daysPerWeek * numWeeks);
 
   // Define the grid template for a single day, repeated for all weeks
-  const gridTemplate = Array(daysPerWeek)
+  const gridTemplate = Array(daysPerWeek * numWeeks)
     .fill(`${column1}% ${column2}% ${column3}%`)
     .join(" ");
 
@@ -43,53 +43,53 @@ const WeeksView: React.FC<WeeksViewProps> = ({
     .map((_, index) => {
       const dayOfWeek = Math.floor(index / sectionsPerDay) % daysPerWeek;
       const isWeekend = dayOfWeek === 5 || dayOfWeek === 6; // Saturday or Sunday
-      const bgColor =
-        index % 3 === 0
-          ? "gray"
-          : index % 3 === 1
-          ? isWeekend
-            ? "gray"
-            : "green"
-          : "gray";
 
       return (
-        <div key={index} className={`bg-${bgColor}-300 relative`}>
-          {index % 3 === 1 && // Render tasks only in the green sections
-            tasks
-              .filter((task) => task.machineId === machineId)
-              .map((task) => {
-                const position = calculatePosition(
-                  task.start,
-                  task.end,
-                  day,
-                  viewType,
-                  shift
-                );
-                if (!position) return null;
+        <div
+          key={index}
+          className={`bg-${
+            index % 3 === 0
+              ? "gray"
+              : index % 3 === 1
+              ? isWeekend
+                ? "gray"
+                : "green"
+              : "gray"
+          }-300`}
+        >
+          {tasks
+            .filter((task) => task.machineId === machineId)
+            .map((task) => {
+              const position = calculatePosition(
+                task.start,
+                task.end,
+                day,
+                viewType,
+                shift
+              );
+              if (!position) return null;
 
-                const { left, width } = position;
-
-                return (
-                  <Task
-                    key={task.id}
-                    task={task}
-                    left={left}
-                    width={width}
-                    viewType={viewType}
-                  />
-                );
-              })}
+              const { left, width } = position;
+              console.log(task.id);
+              return (
+                <Task
+                  viewType={viewType}
+                  key={task.id}
+                  task={task}
+                  left={left}
+                  width={width}
+                />
+              );
+            })}
         </div>
       );
     });
 
-  console.log(gridTemplate);
   return (
     <div
       className="relative h-20 border border-black-300 grid"
       style={{
         gridTemplateColumns: gridTemplate,
-        gridTemplateRows: `repeat(${numWeeks}, 1fr)`, // One row for each week
       }}
     >
       {gridDivs}

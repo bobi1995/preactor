@@ -56,6 +56,7 @@ const DaysView: React.FC<DaysViewProps> = ({
             if (!position) return null;
 
             const { left, width } = position;
+            console.log(task.id);
 
             return (
               <Task
