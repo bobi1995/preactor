@@ -1,15 +1,18 @@
 import React from "react";
+import { Machine, Order } from "../../db/interface";
+import { convertTimeToDecimal, shifts } from "../../db/shifts";
+import DaysView from "./TaskComponent/DaysView";
+import HoursView from "./TaskComponent/HoursView";
+import WeeksView from "./TaskComponent/WeeksView";
 
 interface TaskComponentProps {
   rowIndex: number;
-  machine: string;
-  tasks: {
-    machine: string;
-    start: string;
-    end: string;
-  }[];
-  viewType: string;
+  machine: Machine;
+  tasks: Order[];
+  viewType: "hours" | "days" | "weeks";
 }
+
+const day = new Date();
 
 const TaskComponent: React.FC<TaskComponentProps> = ({
   rowIndex,
@@ -17,64 +20,55 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
   tasks,
   viewType,
 }) => {
-  const calculateTimelineBounds = () => {
-    if (viewType === "hours") {
-      return {
-        start: new Date("2024-11-23T00:00:00").getTime(),
-        end: new Date("2024-11-23T23:59:59").getTime(),
-      };
-    } else if (viewType === "days") {
-      return {
-        start: new Date("2024-11-20T00:00:00").getTime(),
-        end: new Date("2024-11-26T23:59:59").getTime(),
-      };
-    } else {
-      return {
-        start: new Date("2024-11-01T00:00:00").getTime(),
-        end: new Date("2024-12-31T23:59:59").getTime(),
-      };
-    }
-  };
-
-  const calculatePosition = (start: string, end: string) => {
-    const { start: timelineStart, end: timelineEnd } =
-      calculateTimelineBounds();
-
-    const startDate = new Date(start).getTime();
-    const endDate = new Date(end).getTime();
-
-    const timelineWidth = timelineEnd - timelineStart;
-    const left = ((startDate - timelineStart) / timelineWidth) * 100;
-    const width = ((endDate - startDate) / timelineWidth) * 100;
-
-    return { left: `${left}%`, width: `${width}%` };
-  };
-  return (
-    <div key={rowIndex} className="relative h-20 border border-gray-300">
-      {tasks
-        .filter((task) => task.machine === machine)
-        .map((task, index) => {
-          const { left, width } = calculatePosition(task.start, task.end);
-          return (
-            <div
-              key={index}
-              className="absolute h-16 bg-blue-500 text-white text-sm flex items-center justify-center rounded"
-              style={{ left, width }}
-            >
-              {new Date(task.start).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}{" "}
-              -{" "}
-              {new Date(task.end).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </div>
-          );
-        })}
-    </div>
-  );
+  let gridTemplate = "";
+  let gridDivs: JSX.Element[] = [];
+  const shift = shifts.find((shift) => shift.id === machine.shiftId);
+  if (!shift) {
+    return null;
+  }
+  const firstDiv = (convertTimeToDecimal(shift.startHour) / 24) * 100;
+  const secondDiv = (shift.duration / 24) * 100;
+  const thirdDiv = 100 - (firstDiv + secondDiv);
+  if (viewType === "hours") {
+    return (
+      <HoursView
+        firstDiv={firstDiv}
+        secondDiv={secondDiv}
+        thirdDiv={thirdDiv}
+        tasks={tasks}
+        day={day}
+        viewType={viewType}
+        shift={shift}
+        machineId={machine.id}
+      />
+    );
+  } else if (viewType === "days") {
+    return (
+      <DaysView
+        firstDiv={firstDiv}
+        secondDiv={secondDiv}
+        thirdDiv={thirdDiv}
+        tasks={tasks}
+        day={day}
+        viewType={viewType}
+        shift={shift}
+        machineId={machine.id}
+      />
+    );
+  } else if (viewType === "weeks") {
+    return (
+      <WeeksView
+        firstDiv={firstDiv}
+        secondDiv={secondDiv}
+        thirdDiv={thirdDiv}
+        tasks={tasks}
+        day={day}
+        viewType={viewType}
+        shift={shift}
+        machineId={machine.id}
+      />
+    );
+  }
 };
 
 export default TaskComponent;
