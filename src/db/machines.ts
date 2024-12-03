@@ -1,6 +1,6 @@
 export default [
   {
-    id: 1,
+    id: "WSNS01",
     name: "TruLaser 3030",
     type: "Laser",
     status: "Active",
@@ -11,7 +11,7 @@ export default [
     shiftId: 1,
   },
   {
-    id: 2,
+    id: "WSNS02",
     name: "TruLaser 3040",
     type: "Laser",
     status: "Active",
@@ -22,7 +22,7 @@ export default [
     shiftId: 2,
   },
   {
-    id: 3,
+    id: "WSNS03",
     name: "TruLaser 3060",
     type: "Laser",
     status: "Active",
@@ -33,7 +33,7 @@ export default [
     shiftId: 1,
   },
   {
-    id: 4,
+    id: "WSBD05",
     name: "TruBend 7036",
     type: "Bending",
     status: "Active",

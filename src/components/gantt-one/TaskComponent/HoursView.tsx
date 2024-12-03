@@ -11,7 +11,7 @@ interface HoursViewProps {
   day: Date;
   viewType: string;
   shift: Shift;
-  machineId: number;
+  machineId: string;
 }
 
 const HoursView: React.FC<HoursViewProps> = ({
@@ -35,23 +35,24 @@ const HoursView: React.FC<HoursViewProps> = ({
         .map((task) => {
           const position = calculatePosition(
             task.start,
-            task.end,
+            task.endHour,
             day,
             viewType,
             shift
           );
           if (!position) return null;
-
           const { left, width } = position;
 
           return (
-            <Task
-              viewType={viewType}
-              key={task.id}
-              task={task}
-              left={left}
-              width={width}
-            />
+            <React.Fragment key={task.order + task.machineId}>
+              <Task
+                viewType={viewType}
+                key={task.id}
+                task={task}
+                left={left}
+                width={width}
+              />
+            </React.Fragment>
           );
         })}
     </div>,

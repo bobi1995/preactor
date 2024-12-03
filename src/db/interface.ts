@@ -1,5 +1,5 @@
 export interface Machine {
-  id: number;
+  id: string;
   name: string;
   type: string;
   status: string;
@@ -9,9 +9,9 @@ export interface Machine {
   shiftId: number;
 }
 export interface Order {
-  machineId: number;
+  machineId: string;
   start: string;
-  end: string;
+  endHour: string;
   order: string;
   sales: string;
   duration: number;

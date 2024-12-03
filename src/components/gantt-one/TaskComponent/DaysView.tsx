@@ -11,7 +11,7 @@ interface DaysViewProps {
   day: Date;
   viewType: string;
   shift: Shift;
-  machineId: number;
+  machineId: string;
 }
 
 const DaysView: React.FC<DaysViewProps> = ({
@@ -29,7 +29,6 @@ const DaysView: React.FC<DaysViewProps> = ({
   const column1 = firstDiv / numDays;
   const column2 = secondDiv / numDays;
   const column3 = thirdDiv / numDays;
-
   const gridTemplate = Array(numDays)
     .fill(`${column1}% ${column2}% ${column3}%`)
     .join(" ");
@@ -48,7 +47,7 @@ const DaysView: React.FC<DaysViewProps> = ({
           .map((task) => {
             const position = calculatePosition(
               task.start,
-              task.end,
+              task.endHour,
               day,
               viewType,
               shift

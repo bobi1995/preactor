@@ -18,12 +18,18 @@ const Task: React.FC<TaskProps> = ({ task, left, width }) => {
         { "bg-red-700": task.type === "maintenance" }
       )}
       style={{ left, width }}
+      onClick={() =>
+        alert(`${task.order} start at ${task.start} and end at ${task.endHour}`)
+      }
     >
       {parseFloat(width) >= 10 && (
         <>
           <p>{task.order}</p>
           <p>{task.sales}</p>
         </>
+      )}
+      {parseFloat(width) >= 10 && task.type === "maintenance" && (
+        <p>MAINTENANCE</p>
       )}
     </div>
   );

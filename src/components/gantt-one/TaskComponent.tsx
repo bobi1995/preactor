@@ -10,19 +10,20 @@ interface TaskComponentProps {
   machine: Machine;
   tasks: Order[];
   viewType: "hours" | "days" | "weeks";
+  day: Date;
 }
-
-const day = new Date();
 
 const TaskComponent: React.FC<TaskComponentProps> = ({
   machine,
   tasks,
   viewType,
+  day,
 }) => {
   const shift = shifts.find((shift) => shift.id === machine.shiftId);
   if (!shift) {
     return null;
   }
+
   const firstDiv = (convertTimeToDecimal(shift.startHour) / 24) * 100;
   const secondDiv = (shift.duration / 24) * 100;
   const thirdDiv = 100 - (firstDiv + secondDiv);

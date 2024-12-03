@@ -11,7 +11,7 @@ interface WeeksViewProps {
   day: Date;
   viewType: string;
   shift: Shift;
-  machineId: number;
+  machineId: string;
 }
 
 const WeeksView: React.FC<WeeksViewProps> = ({
@@ -62,7 +62,7 @@ const WeeksView: React.FC<WeeksViewProps> = ({
             .map((task) => {
               const position = calculatePosition(
                 task.start,
-                task.end,
+                task.endHour,
                 day,
                 viewType,
                 shift

@@ -31,8 +31,8 @@ const adjustTaskForVisiblePeriod = (
     viewType
   );
   const taskStart = new Date(start).getTime();
-  const taskEnd = new Date(end).getTime();
 
+  const taskEnd = new Date(end).getTime();
   // Cut off the task at the boundaries of the visible period
   const adjustedStart = Math.max(taskStart, timelineStart);
   const adjustedEnd = Math.min(taskEnd, timelineEnd);
@@ -55,6 +55,7 @@ export const calculatePosition = (
     day,
     viewType
   );
+
   const { start: timelineStart, end: timelineEnd } = calculateTimelineBounds(
     day,
     viewType
@@ -78,6 +79,7 @@ export const calculatePosition = (
     width =
       (parseFloat((duration * (0.001 / 3600)).toFixed(2)) * 100) /
       shift.duration;
+
     if (width > 100) {
       width = 100;
     }
@@ -109,6 +111,7 @@ export const calculatePosition = (
     width =
       (parseFloat((duration * (0.001 / 3600)).toFixed(0)) * 100) / (7 * 8 * 9);
   }
+
   return { left: `${left}%`, width: `${width}%` };
 };
 
